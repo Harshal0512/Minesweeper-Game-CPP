@@ -1,4 +1,4 @@
-//Date Created-17th April
+//Date Created-22nd April
 
 #include<iostream.h>
 #include<stdio.h>
@@ -42,18 +42,21 @@ void initInputFeeder(int board[RMAX][CMAX], int urow, int ucol){
 }
 
 void foundZero(int board[RMAX][CMAX], int checker[RMAX][CMAX], int x, int y){
-    if(checker[x][y] == 0 && board[x][y] != 9 && x >= 0 && x < urow && y >= 0 && y < ucol){
-        checker[x][y] = 1;
-        if(board[x][y] == 0){
-            foundZero(board, checker, x, y-1);          //left
-            foundZero(board, checker, x, y+1);          //right
-            foundZero(board, checker, x-1, y-1);        //top left
-            foundZero(board, checker, x-1, y);          //top
-            foundZero(board, checker, x-1, y+1);        //top right
-            foundZero(board, checker, x+1, y-1);        //bottom left
-            foundZero(board, checker, x+1, y);          //bottom
-            foundZero(board, checker, x+1, y+1);        //bottom right
+    int a, b, c, d;
+    a=x-1;
+    b=x+1;
+    d=y+1;
+    while(a<=b){
+        for(c=y-1;c<=d;c++){
+            ///Check a and c greater than zero, Very Imp Logcal Error, to prevent array index from getting less than zero
+            ///Check a and c less than urow and ucol, Very Imp Logical Error, to prevent array index from going beyond user entered row and column as to prevent it from opening extra blocks, if this statement is absent the index will go to the next row after its row is over. eg if index is [6][9] and maximum index is [10][9] so if 9 is increased by 1 it will go to [7][0] hence the bug of opening extra blocks
+            if(board[a][c]!=9 && checker[a][c]==0 && a>=0 && c>=0 && a<urow && c<ucol){
+                checker[a][c]=1;
+                if(board[a][c]==0)
+                    foundZero(board, checker, a, c);
+            }
         }
+        a++;
     }
 }
 
